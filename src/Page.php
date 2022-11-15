@@ -130,6 +130,20 @@ class Page
 
 	protected function renderAction ( $callback, $action )
 	{
+		try {
+			$request   = filter_input_array( INPUT_POST ) ?? filter_input_array( INPUT_GET ) ?: [];
+			$func_args = $request['args'] ?? '[]';
+			$func_args = json_decode( $func_args, FALSE, 512, JSON_THROW_ON_ERROR );
+		}
+		catch ( \Exception $e ) {
+			if ( !isset( $_GET['args'] ) || empty( $_GET['args'] ) ) {
+				$func_args = [];
+			}
+			else {
+				$func_args = is_array( $_GET['args'] ) ? $_GET['args'] : [ $_GET['args'] ];
+			}
+		}
+
 		$execTime    = apply_filters( "global_exec_time", 720, (int) ini_get( 'max_execution_time' ) );
 		$memoryLimit = apply_filters( "global_memory_limit", '512M', ini_get( 'memory_limit' ) );
 
@@ -138,7 +152,7 @@ class Page
 
 		$stream = new Stream( $execTime, $memoryLimit );
 		apply_filters( "{$action}_pre", TRUE, $stream ) && $stream->start();
-		$callback( $stream );
+		$callback( $stream, ...( (array) $func_args ) );
 		apply_filters( "{$action}_post", TRUE, $stream ) && $stream->stop();
 	}
 
