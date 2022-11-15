@@ -34,6 +34,9 @@ class Routines
 
 		add_action( $hook_name, function () { $this->admin_bar_init(); }, PHP_INT_MIN );
 		add_action( 'admin_enqueue_scripts', function () { $this->enqueue_scripts(); } );
+		add_action( 'debug_bar_post_init', function ( $enable, $is_admin_bar_showing, $is_user_logged_in, $is_super_admin, $wp_doing_ajax, $is_wp_login ) {
+			$enable && add_action( 'wp_enqueue_scripts', function () { $this->enqueue_scripts(); } );
+		}, 10, 6 );
 	}
 
 	protected function enqueue_scripts ()
