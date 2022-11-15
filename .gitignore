@@ -1,0 +1,16 @@
+# ignore environment settings
+.idea/
+
+# ignore dependency directories
+node_modules/
+vendor/
+
+# ignore tests cache
+tests/_data/cache
+
+# ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+composer.lock

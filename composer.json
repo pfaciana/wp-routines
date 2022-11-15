@@ -1,0 +1,26 @@
+{
+	"name": "pfaciana/wp-routines",
+	"version": "0.0.1",
+	"description": "An in-browser console for running routines within WordPress",
+	"keywords": [],
+	"homepage": "https://renderdev.com/",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Phil Faciana",
+			"email": "phil@renderdev.com",
+			"homepage": "https://renderdev.com/",
+			"role": "Developer"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"WP_Routines\\": "src/"
+		},
+		"files": [
+			"load.php"
+		]
+	},
+	"require-dev": {},
+	"require": {}
+}
