@@ -36,13 +36,13 @@
 		}
 
 		function scrollToBottom($routine, $output) {
-			if (!$routine instanceof jQuery) {
+			if (!($routine instanceof jQuery)) {
 				$routine = getRoutineEl($output);
 			}
 			if (!$routine.data('autoScroll')) {
 				return;
 			}
-			if (!$output instanceof jQuery) {
+			if (!($output instanceof jQuery)) {
 				$output = $routine.find('.routine-output-buffer');
 			}
 			$output.scrollTop($output.prop('scrollHeight'));
@@ -79,9 +79,32 @@
 				data: data,
 				xhr: function () {
 					var xhr = $.ajaxSettings.xhr();
+					$output.html('');
+					var prevResponseLength = 0;
 					xhr.onprogress = function (e) {
-						$output.html(e.target.responseText);
-						scrollToBottom($routine, $output);
+						var currentResponseLength = this.responseText.length;
+						if (prevResponseLength != currentResponseLength) {
+							var newResponse = this.responseText.substring(prevResponseLength, currentResponseLength);
+							if (newResponse.includes('\\a')) {
+								newResponse = newResponse.replaceAll('\\a', "\\b\\b\n");
+							}
+							if (newResponse.includes('\\b')) {
+								var currentOutputText = $output.get(0).textContent;
+								var newTextSections = newResponse.split('\\b');
+								$.each(newTextSections, function (i, newText) {
+									if (i !== 0) {
+										var pos = currentOutputText.lastIndexOf("\n");
+										currentOutputText = currentOutputText.substring(0, pos);
+									}
+									currentOutputText += newText;
+									$output.html(currentOutputText);
+								});
+							} else {
+								$output.append(newResponse);
+							}
+							scrollToBottom($routine, $output);
+							prevResponseLength = currentResponseLength;
+						}
 					};
 					return xhr;
 				},
@@ -93,5 +116,8 @@
 			}));
 		});
 
+		$('[data-routine-id]').each(function () {
+			scrollToBottom(routineData($(this), 'autoScroll', true));
+		});
 	});
 }(jQuery, window, document));
