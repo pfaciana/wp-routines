@@ -12,7 +12,7 @@ class Stream
 	{
 		$this->defaultExecTime    = (int) $defaultExecTime;
 		$this->defaultMemoryLimit = $defaultMemoryLimit;
-		$this->start_time         = WP_START_TIMESTAMP ?: microtime( TRUE );
+		$this->startTime          = WP_START_TIMESTAMP ?: microtime( TRUE );
 	}
 
 	public function start ()
