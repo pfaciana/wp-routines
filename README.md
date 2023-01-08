@@ -160,7 +160,7 @@ add_action( 'wp_routines', function ( \WP_Routines\Routines $routines ) {
 
 #### Creating `Tasks`
 
-See the [Tasks Documentation](https://github.com/pfaciana/wp-routines/wiki/WP_Routines_Tasks~__construct]) for full set of $config options, but here are a couple of things to be aware of.
+See the [Tasks Documentation](https://github.com/pfaciana/wp-routines/wiki/WP_Routines_Tasks~__construct) for full set of $config options, but here are a couple of things to be aware of.
 
 `$this->taskPrefix` - is the prefix a method should have to be registered as a task. Default: 'wp_ajax_'. All methods that begin with this string (and are public methods) will automatically become a `Task`
 
