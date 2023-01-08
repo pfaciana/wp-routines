@@ -7,29 +7,29 @@
 			return el.hasAttribute('data-routine-id') ? $(el) : $(el).closest('[data-routine-id]');
 		}
 
-		function routineData(el, prop, value, returnEl = true) {
-			let $el = getRoutineEl(el), elID = $el.data('routine-id');
+		function routineData(el, key, value, returnEl = true) {
+			let $el = getRoutineEl(el), menu_slug = $el.data('routine-id');
 
-			if (typeof prop === 'undefined') {
+			if (typeof key === 'undefined') {
 				return $el.data();
 			}
 
 			if (typeof value === 'undefined') {
-				return $el.data(prop);
+				return $el.data(key);
 			}
 
-			const prevValue = $el.data(prop);
+			const prevValue = $el.data(key);
 
 			if (value === 'toggle') {
 				value = !prevValue;
 			}
 
-			$el.data(prop, value);
+			$el.data(key, value);
 
-			if ('do_action' in window) {
-				do_action('rdb/routine/update', elID, prop, value, prevValue, $el);
-				do_action('rdb/routine/update/' + elID, prop, value, prevValue, $el);
-				do_action('rdb/routine/update/' + elID + '/' + prop, value, prevValue, $el);
+			if (typeof jQuery === 'function' && 'publish' in jQuery) {
+				jQuery.publish('rdb/routine/update', menu_slug, key, value, prevValue, $el);
+				jQuery.publish('rdb/routine/update/' + menu_slug, key, value, prevValue, $el);
+				jQuery.publish('rdb/routine/update/' + menu_slug + '/' + key, value, prevValue, $el);
 			}
 
 			return returnEl ? $el : value;
